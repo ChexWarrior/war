@@ -1,0 +1,3 @@
+[submodule "app/scripts/DoC"]
+	path = app/scripts/DoC
+	url = git@github.com:ChexWarrior/DoC.git
