@@ -15,5 +15,8 @@
     "gulp-babel": "^6.1.2",
     "gulp-sourcemaps": "^2.4.1",
     "node-sass": "^4.5.0"
+  },
+  "dependencies": {
+    "vue": "^2.2.1"
   }
 }
