@@ -4,7 +4,7 @@
   template: `
     <div class="card-table">
       <span>Deck ID: {{ deck_id }} Cards Remaining: {{ remaining }}</span>
-      <pile v-bind:currentCardSrc="drawnCardUrl"></pile>
+      <pile v-if="drawnCardUrl" v-bind:currentCardSrc="drawnCardUrl"></pile>
       <button v-on:click="drawCard">Draw a Card</button>
     </div>`,
   beforeCreate: function() {
@@ -17,7 +17,7 @@
     return {
       'deck_id': 'not set',
       'remaining': 0,
-      'drawnCardUrl': 'https://deckofcardsapi.com/static/img/8C.png'
+      'drawnCardUrl': ''
     };
   },
   methods: {
