@@ -28,6 +28,7 @@
       }).then((response) => {
         console.dir(response);
         this.drawnCardUrl = response.cards[0].image;
+        this.remaining = response.remaining;
       });
     }
   }
