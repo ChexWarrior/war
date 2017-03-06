@@ -4,17 +4,25 @@
   template: `
     <div class="card-table">
       <span>Deck ID: {{ deck_id }} Cards Remaining: {{ remaining }}</span>
-      <pile v-if="drawnCardUrl" v-bind:currentCardSrc="drawnCardUrl"></pile>
-      <button v-on:click="drawCard">Draw a Card</button>
+      <pile v-if="disabled" 
+            v-bind:currentCardSrc="drawnCardUrl">
+      </pile>
+      <button 
+        v-bind:disabled="!disabled" 
+        v-on:click="drawCard">
+        Draw a Card
+      </button>
     </div>`,
   beforeCreate: function() {
     DoC.createDeck({ shuffled: true }).then((response) => {
         this.deck_id = response.deck_id;
         this.remaining = response.remaining;
+        this.disabled = response.success;
     });
   },
   data: function() {
     return {
+      'disabled': true,
       'deck_id': 'not set',
       'remaining': 0,
       'drawnCardUrl': ''
@@ -26,7 +34,7 @@
         deckID: this.deck_id,
         numCards: 1
       }).then((response) => {
-        console.dir(response);
+        console.log(response);
         this.drawnCardUrl = response.cards[0].image;
         this.remaining = response.remaining;
       });
