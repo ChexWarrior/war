@@ -1,17 +1,20 @@
 ((DoC, Vue) => {
-    
+
  Vue.component('card-table', {
   template: `
     <div class="card-table">
-      <span>Deck ID: {{ deck_id }} Cards Remaining: {{ remaining }}</span>
-      <pile v-if="disabled" 
+      <span>Deck ID: {{ deck_id }}</span>
+      <span>Cards Remaining: {{ remaining }}</span>
+      <pile v-if="disabled"
             v-bind:currentCardSrc="drawnCardUrl">
       </pile>
-      <button 
-        v-bind:disabled="!disabled" 
-        v-on:click="drawCard">
-        Draw a Card
-      </button>
+      <div class="deck-controls">
+        <button
+          v-bind:disabled="!disabled"
+          v-on:click="drawCard">
+          Draw a Card
+        </button>
+      </div>
     </div>`,
   beforeCreate: function() {
     DoC.createDeck({ shuffled: true }).then((response) => {
@@ -44,7 +47,7 @@
 
  Vue.component('pile', {
   template: `
-    <div class="pile">
+    <div v-bind:class="currentCardSrc ? 'pile' : 'pile pile-empty'" >
       <img v-bind:src="currentCardSrc"/>
     </div>`,
   props: ['currentCardSrc']
