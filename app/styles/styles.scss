@@ -1,3 +1,21 @@
-.card-table {
-  border: 1px solid #000;
+body {
+  background-color: rgb(30, 93, 30);
+}
+
+.pile {
+  width: 226px;
+  height: 314px;
+}
+
+.pile-empty {
+  border: 5px solid #FFF;
+  border-radius: 20px;
+  background: #36C;
+  background:
+  linear-gradient(115deg, transparent 75%, rgba(255,255,255,.8) 75%) 0 0,
+  linear-gradient(245deg, transparent 75%, rgba(255,255,255,.8) 75%) 0 0,
+  linear-gradient(115deg, transparent 75%, rgba(255,255,255,.8) 75%) 7px -15px,
+  linear-gradient(245deg, transparent 75%, rgba(255,255,255,.8) 75%) 7px -15px,
+  #36c;
+  background-size: 15px 30px;
 }
