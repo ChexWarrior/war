@@ -3,6 +3,11 @@ var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 
+gulp.task('watch', () => {
+  gulp.watch('app/styles/*.scss', ['style']);
+  gulp.watch('app/scripts/src/*.js', ['script']);
+});
+
 gulp.task('style', () => {
   return gulp.src('app/styles/*.scss')
     .pipe(sass().on('error', sass.logError))
