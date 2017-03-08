@@ -6,21 +6,15 @@
       <span>Deck ID: {{ deck_id }}</span>
       <span>Cards Remaining: {{ remaining }}</span>
       <pile v-if="disabled"
-            v-bind:currentCardSrc="drawnCardUrl">
+            v-bind:currentCardSrc="drawnCardUrl"
+            v-on:draw="drawCard">
       </pile>
-      <div class="deck-controls">
-        <button
-          v-bind:disabled="!disabled"
-          v-on:click="drawCard">
-          Draw a Card
-        </button>
-      </div>
     </div>`,
   beforeCreate: function() {
     DoC.createDeck({ shuffled: true }).then((response) => {
-        this.deck_id = response.deck_id;
-        this.remaining = response.remaining;
-        this.disabled = response.success;
+      this.deck_id = response.deck_id;
+      this.remaining = response.remaining;
+      this.disabled = response.success;
     });
   },
   data: function() {
@@ -47,10 +41,17 @@
 
  Vue.component('pile', {
   template: `
-    <div v-bind:class="currentCardSrc ? 'pile' : 'pile pile-empty'" >
-      <img v-bind:src="currentCardSrc"/>
+    <div v-bind:class="currentCardSrc ? 'pile' : 'pile pile-empty'"
+         v-on:click="draw">
+      <img v-bind:src="currentCardSrc" />
     </div>`,
-  props: ['currentCardSrc']
+  props: ['currentCardSrc'],
+  methods: {
+    draw: function() {
+      console.log('Draw card!');
+      this.$emit('draw');
+    }
+  }
  });
 
  let app = new Vue({
