@@ -20,7 +20,8 @@
       'disabled': true,
       'deck_id': 'not set',
       'remaining': 0,
-      'drawnCardUrl': ''
+      'drawnCardUrl': '',
+      'drawPile1Cards': {}
     };
   },
   methods: {
