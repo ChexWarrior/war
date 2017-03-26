@@ -80,8 +80,8 @@
   template: `
     <div>
       <span>Pile Name: {{ name }}</span>
-      <span>Remaining Cards: {{ remaining }}</span>
-      <div v-bind:class="drawnCard ? 'pile' : 'pile pile-empty'">
+      <span>Cards Remaining: {{ remaining }}</span>
+      <div class="pile">
       </div>
     </div>
   `,
