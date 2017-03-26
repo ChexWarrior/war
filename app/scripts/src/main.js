@@ -9,9 +9,11 @@
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deck_id }}</span>
         <span>Cards Remaining: {{ remaining }}</span>
-        <draw-pile v-bind:cards="drawPile1Cards"></draw-pile>
+        <draw-pile v-bind:cards="drawPile1Cards"
+                   name="Draw Pile 1"></draw-pile>
         <br/>
-        <draw-pile v-bind:cards="drawPile2Cards"></draw-pile>
+        <draw-pile v-bind:cards="drawPile2Cards"
+                   name="Draw Pile 2"></draw-pile>
       </div>
     </div>`,
   beforeCreate: function() {
@@ -76,13 +78,22 @@
 
  Vue.component('draw-pile', {
   template: `
-    <div v-bind:class="drawnCard ? 'pile' : 'pile pile-empty'">
+    <div>
+      <span>Pile Name: {{ name }}</span>
+      <span>Remaining Cards: {{ remaining }}</span>
+      <div v-bind:class="drawnCard ? 'pile' : 'pile pile-empty'">
+      </div>
     </div>
   `,
-  props: ['cards'],
+  props: ['cards', 'name'],
+  computed: {
+    remaining: function() {
+      return this.cards.length;
+    }
+  },
   data: function() {
     return {
-      drawnCard: false
+      drawnCard: false,
     };
   }
  });
