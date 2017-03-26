@@ -7,20 +7,20 @@
               v-on:click="startGame"
               v-if="disabled">Click to Start</button>
       <div v-bind:class="disabled ? 'game-suspended' : ''">
-        <span>Deck ID: {{ deck_id }}</span>
+        <span>Deck ID: {{ deckID }}</span>
         <span>Cards Remaining: {{ remaining }}</span>
         <draw-pile v-bind:isCreated="drawPile1Created"
-                   name="drawPile1"
-                   v-bind:deckID="deck_id"></draw-pile>
+                   v-bind:deckID="deckID"
+                   name="drawPile1"></draw-pile>
         <br/>
         <draw-pile v-bind:isCreated="drawPile2Created"
-                   name="drawPile2"
-                   v-bind:deckID="deck_id"></draw-pile>
+                   v-bind:deckID="deckID"
+                   name="drawPile2"></draw-pile>
       </div>
     </div>`,
   beforeCreate: function() {
     DoC.createDeck({ shuffle: true }).then((response) => {
-      this.deck_id = response.deck_id;
+      this.deckID = response.deck_id;
       this.remaining = response.remaining;
       this.disabled = response.success;
     })
@@ -28,7 +28,7 @@
   data: function() {
     return {
       'disabled': true,
-      'deck_id': 'not set',
+      'deckID': 'not set',
       'remaining': 0,
       'drawPile1Created': false,
       'drawPile2Created': false
@@ -38,7 +38,7 @@
     startGame: function() {
       this.disabled = false;
       this.createDrawPiles({
-        deckID: this.deck_id,
+        deckID: this.deckID,
         pileName1: 'drawPile1',
         pileName2: 'drawPile2',
         numCards: 26
