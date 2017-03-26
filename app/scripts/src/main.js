@@ -5,10 +5,8 @@
     <div class="card-table">
       <span>Deck ID: {{ deck_id }}</span>
       <span>Cards Remaining: {{ remaining }}</span>
-      <pile v-if="disabled"
-            v-bind:currentCardSrc="drawnCardUrl"
-            v-on:draw="drawCard">
-      </pile>
+      <button v-on:click="startGame">Click to Start</button>
+      <draw-pile v-bind:cards="drawPile1Cards" id="drawPile1"></draw-pile>
     </div>`,
   beforeCreate: function() {
     DoC.createDeck({ shuffled: true }).then((response) => {
