@@ -52,20 +52,33 @@
   }
  });
 
- Vue.component('pile', {
+ Vue.component('draw-pile', {
   template: `
-    <div v-bind:class="currentCardSrc ? 'pile' : 'pile pile-empty'"
-         v-on:click="draw">
-      <img v-bind:src="currentCardSrc" />
-    </div>`,
-  props: ['currentCardSrc'],
-  methods: {
-    draw: function() {
-      console.log('Draw card!');
-      this.$emit('draw');
-    }
+    <div v-bind:class="drawnCard ? 'pile' : 'pile pile-empty'">
+    </div>
+  `,
+  props: ['cards'],
+  data: function() {
+    return {
+      drawnCard: false
+    };
   }
  });
+
+ // Vue.component('pile', {
+ //  template: `
+ //    <div v-bind:class="currentCardSrc ? 'pile' : 'pile pile-empty'"
+ //         v-on:click="draw">
+ //      <img v-bind:src="currentCardSrc" />
+ //    </div>`,
+ //  props: ['currentCardSrc'],
+ //  methods: {
+ //    draw: function() {
+ //      console.log('Draw card!');
+ //      this.$emit('draw');
+ //    }
+ //  }
+ // });
 
  let app = new Vue({
   el: '#app'
