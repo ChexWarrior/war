@@ -25,14 +25,28 @@
     };
   },
   methods: {
-    drawCard: function() {
-      DoC.drawFromDeck({
+    startGame: function() {
+      this.createPile({
         deckID: this.deck_id,
-        numCards: 1
+        pileName: 'drawPile1',
+        numCards: 26
+      });
+    },
+    createPile: function(parameters) {
+      let drawnCards = [];
+      DoC.drawFromDeck({
+        deckID: parameters.deckID,
+        numCards: parameters.numCards
       }).then((response) => {
-        console.log(response);
-        this.drawnCardUrl = response.cards[0].image;
+        drawnCards = response.cards;
         this.remaining = response.remaining;
+        return DoC.addToPile({
+          pileName: parameters.pileName,
+          cardsToAdd: drawnCards,
+          deckID: parameters.deckID
+        });
+      }).then((response) => {
+        this.drawPile1Cards = drawnCards;
       });
     }
   }
