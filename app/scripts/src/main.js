@@ -9,11 +9,11 @@
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deck_id }}</span>
         <span>Cards Remaining: {{ remaining }}</span>
-        <draw-pile v-bind:cards="drawPile1Cards"
+        <draw-pile v-bind:isCreated="drawPile1Created"
                    name="drawPile1"
                    v-bind:deckID="deck_id"></draw-pile>
         <br/>
-        <draw-pile v-bind:cards="drawPile2Cards"
+        <draw-pile v-bind:isCreated="drawPile2Created"
                    name="drawPile2"
                    v-bind:deckID="deck_id"></draw-pile>
       </div>
@@ -30,8 +30,8 @@
       'disabled': true,
       'deck_id': 'not set',
       'remaining': 0,
-      'drawPile1Cards': {},
-      'drawPile2Cards': {}
+      'drawPile1Created': false,
+      'drawPile2Created': false
     };
   },
   methods: {
@@ -45,34 +45,31 @@
       });
     },
     createDrawPiles: function(parameters) {
-      let drawnCards = [];
       DoC.drawFromDeck({
         deckID: parameters.deckID,
         numCards: parameters.numCards
       }).then((response) => {
-        drawnCards = response.cards;
         this.remaining = response.remaining;
         return DoC.addToPile({
           pileName: parameters.pileName1,
-          cardsToAdd: drawnCards,
+          cardsToAdd: response.cards,
           deckID: parameters.deckID
         });
       }).then((response) => {
-        this.drawPile1Cards = drawnCards;
+        this.drawPile1Created = response.success;
         return DoC.drawFromDeck({
           deckID: parameters.deckID,
           numCards: parameters.numCards
         });
       }).then((response) => {
-        drawnCards = response.cards;
         this.remaining = response.remaining;
         return DoC.addToPile({
           pileName: parameters.pileName2,
-          cardsToAdd: drawnCards,
+          cardsToAdd: response.cards,
           deckID: parameters.deckID
         });
       }).then((response) => {
-        this.drawPile2Cards = drawnCards;
+        this.drawPile2Created = response.success;
       });
     }
   }
@@ -89,26 +86,22 @@
       </div>
     </div>
   `,
-  props: ['cards', 'name', 'deckID'],
-  computed: {
-    remaining: function() {
-      return this.cards.length;
-    }
-  },
+  props: ['isCreated', 'name', 'deckID'],
   methods: {
     drawCard: function() {
       DoC.drawFromPile({
         deckID: this.deckID,
         pileName: this.name
       }).then((response) => {
-        console.log(response);
         this.drawnCardUrl = response.cards[0].image;
+        this.remaining = response.piles[this.name].remaining;
       });
     }
   },
   data: function() {
     return {
       drawnCardUrl: '',
+      remaining: 0
     };
   }
  });
