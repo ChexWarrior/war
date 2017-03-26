@@ -10,18 +10,20 @@
         <span>Deck ID: {{ deck_id }}</span>
         <span>Cards Remaining: {{ remaining }}</span>
         <draw-pile v-bind:cards="drawPile1Cards"
-                   name="Draw Pile 1"></draw-pile>
+                   name="drawPile1"
+                   v-bind:deckID="deck_id"></draw-pile>
         <br/>
         <draw-pile v-bind:cards="drawPile2Cards"
-                   name="Draw Pile 2"></draw-pile>
+                   name="drawPile2"
+                   v-bind:deckID="deck_id"></draw-pile>
       </div>
     </div>`,
   beforeCreate: function() {
-    DoC.createDeck({ shuffled: true }).then((response) => {
+    DoC.createDeck({ shuffle: true }).then((response) => {
       this.deck_id = response.deck_id;
       this.remaining = response.remaining;
       this.disabled = response.success;
-    });
+    })
   },
   data: function() {
     return {
@@ -81,19 +83,32 @@
     <div>
       <span>Pile Name: {{ name }}</span>
       <span>Cards Remaining: {{ remaining }}</span>
-      <div class="pile">
+      <div v-on:click="drawCard" class="pile"></div>
+      <div class="current-card">
+        <img v-bind:src="drawnCardUrl"/>
       </div>
     </div>
   `,
-  props: ['cards', 'name'],
+  props: ['cards', 'name', 'deckID'],
   computed: {
     remaining: function() {
       return this.cards.length;
     }
   },
+  methods: {
+    drawCard: function() {
+      DoC.drawFromPile({
+        deckID: this.deckID,
+        pileName: this.name
+      }).then((response) => {
+        console.log(response);
+        this.drawnCardUrl = response.cards[0].image;
+      });
+    }
+  },
   data: function() {
     return {
-      drawnCard: false,
+      drawnCardUrl: '',
     };
   }
  });
