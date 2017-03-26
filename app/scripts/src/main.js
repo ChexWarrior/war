@@ -9,7 +9,9 @@
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deck_id }}</span>
         <span>Cards Remaining: {{ remaining }}</span>
-        <draw-pile v-bind:cards="drawPile1Cards" id="drawPile1"></draw-pile>
+        <draw-pile v-bind:cards="drawPile1Cards"></draw-pile>
+        <br/>
+        <draw-pile v-bind:cards="drawPile2Cards"></draw-pile>
       </div>
     </div>`,
   beforeCreate: function() {
@@ -24,20 +26,21 @@
       'disabled': true,
       'deck_id': 'not set',
       'remaining': 0,
-      'drawnCardUrl': '',
-      'drawPile1Cards': {}
+      'drawPile1Cards': {},
+      'drawPile2Cards': {}
     };
   },
   methods: {
     startGame: function() {
       this.disabled = false;
-      this.createPile({
+      this.createDrawPiles({
         deckID: this.deck_id,
-        pileName: 'drawPile1',
+        pileName1: 'drawPile1',
+        pileName2: 'drawPile2',
         numCards: 26
       });
     },
-    createPile: function(parameters) {
+    createDrawPiles: function(parameters) {
       let drawnCards = [];
       DoC.drawFromDeck({
         deckID: parameters.deckID,
@@ -46,12 +49,26 @@
         drawnCards = response.cards;
         this.remaining = response.remaining;
         return DoC.addToPile({
-          pileName: parameters.pileName,
+          pileName: parameters.pileName1,
           cardsToAdd: drawnCards,
           deckID: parameters.deckID
         });
       }).then((response) => {
         this.drawPile1Cards = drawnCards;
+        return DoC.drawFromDeck({
+          deckID: parameters.deckID,
+          numCards: parameters.numCards
+        });
+      }).then((response) => {
+        drawnCards = response.cards;
+        this.remaining = response.remaining;
+        return DoC.addToPile({
+          pileName: parameters.pileName2,
+          cardsToAdd: drawnCards,
+          deckID: parameters.deckID
+        });
+      }).then((response) => {
+        this.drawPile2Cards = drawnCards;
       });
     }
   }
