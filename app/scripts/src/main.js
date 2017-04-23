@@ -45,8 +45,44 @@
         numCards: 26
       });
     },
+    translateValue: function(value) {
+      switch(value) {
+        case 'KING':
+          return 13;
+        break;
+        case 'QUEEN':
+          return 12;
+        break;
+        case 'JACK':
+          return 11;
+        break;
+        case 'ACE':
+          return 14;
+        break;
+        default:
+          return parseInt(value, 10);
+      }
+    },
     startMatch: function(event) {
       console.log('Event Received!', event);
+      if(event.pile == 'drawPile1') {
+        this.pile1Card = this.translateValue(event.value);
+      } else if(event.pile == 'drawPile2') {
+        this.pile2Card = this.translateValue(event.value);
+      }
+
+      if(this.pile1Card && this.pile2Card) {
+        console.log('Both piles have drawn a card!');
+        if(this.pile1Card > this.pile2Card) {
+          console.log('Player 1 wins!');
+        } else if (this.pile2Card > this.pile1Card) {
+          console.log('Player 2 wins!');
+        } else {
+          console.log('Tie!');
+        }
+      } else {
+        console.log('Both piles have not drawn a card!');
+      }
     },
     createDrawPiles: async function(parameters) {
       let deck = await DoC.drawFromDeck({
