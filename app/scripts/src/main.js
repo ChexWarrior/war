@@ -11,10 +11,12 @@
         <span>Cards Remaining: {{ remaining }}</span>
         <draw-pile v-bind:isCreated="drawPile1Created"
                    v-bind:deckID="deckID"
+                   v-on:drawn="startMatch"
                    name="drawPile1"></draw-pile>
         <br/>
         <draw-pile v-bind:isCreated="drawPile2Created"
                    v-bind:deckID="deckID"
+                   v-on:drawn="startMatch"
                    name="drawPile2"></draw-pile>
       </div>
     </div>`,
@@ -42,6 +44,9 @@
         pileName2: 'drawPile2',
         numCards: 26
       });
+    },
+    startMatch: function(event) {
+      console.log('Event Received!', event);
     },
     createDrawPiles: async function(parameters) {
       let deck = await DoC.drawFromDeck({
@@ -97,8 +102,13 @@
         pileName: this.name
       });
       
+      console.log(draw);
       this.drawnCardUrl = draw.cards[0].image;
       this.remaining = draw.piles[this.name].remaining;
+      this.$emit('drawn', {
+        pile: this.name,
+        value: draw.cards[0].value
+      });
     }
   },
   data: function() {
