@@ -18,12 +18,11 @@
                    name="drawPile2"></draw-pile>
       </div>
     </div>`,
-  beforeCreate: function() {
-    DoC.createDeck({ shuffle: true }).then((response) => {
-      this.deckID = response.deck_id;
-      this.remaining = response.remaining;
-      this.disabled = response.success;
-    })
+  beforeCreate: async function() {
+      const deck = await DoC.createDeck({ shuffle: true });
+      this.deckID = deck.deck_id;
+      this.remaining = deck.remaining;
+      this.disabled = deck.success;
   },
   data: function() {
     return {
@@ -44,33 +43,41 @@
         numCards: 26
       });
     },
-    createDrawPiles: function(parameters) {
-      DoC.drawFromDeck({
+    createDrawPiles: async function(parameters) {
+      let deck = await DoC.drawFromDeck({
         deckID: parameters.deckID,
         numCards: parameters.numCards
-      }).then((response) => {
-        this.remaining = response.remaining;
-        return DoC.addToPile({
-          pileName: parameters.pileName1,
-          cardsToAdd: response.cards,
-          deckID: parameters.deckID
-        });
-      }).then((response) => {
-        this.drawPile1Created = response.success;
-        return DoC.drawFromDeck({
-          deckID: parameters.deckID,
-          numCards: parameters.numCards
-        });
-      }).then((response) => {
-        this.remaining = response.remaining;
-        return DoC.addToPile({
-          pileName: parameters.pileName2,
-          cardsToAdd: response.cards,
-          deckID: parameters.deckID
-        });
-      }).then((response) => {
-        this.drawPile2Created = response.success;
       });
+
+      console.log(deck);
+
+      this.remaining = deck.remaining;
+      const pile1 = await DoC.addToPile({
+        pileName: parameters.pileName1,
+        cardsToAdd: deck.cards,
+        deckID: parameters.deckID
+      });
+
+      console.log(pile1);
+
+      this.drawPile1Created = pile1.success;
+      deck = await DoC.drawFromDeck({
+        deckID: parameters.deckID,
+        numCards: parameters.numCards
+      });
+
+      console.log(deck);
+
+      this.remaining = deck.remaining;
+      const pile2 = await DoC.addToPile({
+        pileName: parameters.pileName2,
+        cardsToAdd: deck.cards,
+        deckID: parameters.deckID
+      });
+
+      console.log(pile2);
+
+      this.drawPile2Created = pile2.success;
     }
   }
  });
