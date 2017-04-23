@@ -18,10 +18,12 @@ gulp.task('script', () => {
   return gulp.src('app/scripts/src/*.js')
     .pipe(sourcemaps.init())
     .pipe(babel({
-      presets: ['es2015']
+      presets: ['es2015'],
+      plugins: [ "transform-async-functions"]
     }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('app/scripts/compiled'));
 });
 
 gulp.task('build', ['style','script']);
+gulp.task('default', ['build']);
