@@ -64,6 +64,8 @@
       }
     },
     startMatch: function(event) {
+      //TODO lock pile when a card is drawn but match unresolved
+      //TODO handle tie
       console.log('Event Received!', event);
       if(event.pile == 'drawPile1') {
         this.pile1Card = this.translateValue(event.value);
