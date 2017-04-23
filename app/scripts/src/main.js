@@ -50,7 +50,6 @@
       });
 
       console.log(deck);
-
       this.remaining = deck.remaining;
       const pile1 = await DoC.addToPile({
         pileName: parameters.pileName1,
@@ -59,7 +58,6 @@
       });
 
       console.log(pile1);
-
       this.drawPile1Created = pile1.success;
       deck = await DoC.drawFromDeck({
         deckID: parameters.deckID,
@@ -67,7 +65,6 @@
       });
 
       console.log(deck);
-
       this.remaining = deck.remaining;
       const pile2 = await DoC.addToPile({
         pileName: parameters.pileName2,
@@ -76,7 +73,6 @@
       });
 
       console.log(pile2);
-
       this.drawPile2Created = pile2.success;
     }
   }
@@ -95,14 +91,14 @@
   `,
   props: ['isCreated', 'name', 'deckID'],
   methods: {
-    drawCard: function() {
-      DoC.drawFromPile({
-        deckID: this.deckID,
+    drawCard: async function() {
+      const draw = await DoC.drawFromPile({ 
+        deckID: this.deckID, 
         pileName: this.name
-      }).then((response) => {
-        this.drawnCardUrl = response.cards[0].image;
-        this.remaining = response.piles[this.name].remaining;
       });
+      
+      this.drawnCardUrl = draw.cards[0].image;
+      this.remaining = draw.piles[this.name].remaining;
     }
   },
   data: function() {
