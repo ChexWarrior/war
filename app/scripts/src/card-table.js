@@ -43,6 +43,9 @@
     },
     translateValue: function(value) {
       switch(value) {
+        case 'ACE':
+          return 14;
+        break;
         case 'KING':
           return 13;
         break;
@@ -51,9 +54,6 @@
         break;
         case 'JACK':
           return 11;
-        break;
-        case 'ACE':
-          return 14;
         break;
         default:
           return parseInt(value, 10);
