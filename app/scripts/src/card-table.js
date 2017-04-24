@@ -7,14 +7,14 @@
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deckID }}</span>
         <pile v-bind:isCreated="drawPile1Created"
-                   v-bind:deckID="deckID"
-                   v-on:drawn="startMatch"
-                   name="drawPile1"></pile>
+              v-bind:deckID="deckID"
+              v-on:drawn="startMatch"
+              name="pile1"></pile>
         <br/>
         <pile v-bind:isCreated="drawPile2Created"
-                   v-bind:deckID="deckID"
-                   v-on:drawn="startMatch"
-                   name="drawPile2"></pile>
+              v-bind:deckID="deckID"
+              v-on:drawn="startMatch"
+              name="pile2"></pile>
       </div>
     </div>`,
   beforeCreate: async function() {
@@ -25,7 +25,7 @@
   data: function() {
     return {
       'disabled': true,
-      'deckID': 'not set',
+      'deckID': null,
       'remaining': 0,
       'drawPile1Created': false,
       'drawPile2Created': false
@@ -36,8 +36,8 @@
       this.disabled = false;
       this.createDrawPiles({
         deckID: this.deckID,
-        pileName1: 'drawPile1',
-        pileName2: 'drawPile2',
+        pileName1: 'pile1',
+        pileName2: 'pile2',
         numCards: 26
       });
     },
@@ -63,9 +63,9 @@
       //TODO lock pile when a card is drawn but match unresolved
       //TODO handle tie
       console.log('Event Received!', event);
-      if(event.pile == 'drawPile1') {
+      if(event.pile == 'pile1') {
         this.pile1Card = this.translateValue(event.value);
-      } else if(event.pile == 'drawPile2') {
+      } else if(event.pile == 'pile2') {
         this.pile2Card = this.translateValue(event.value);
       }
 
