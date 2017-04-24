@@ -6,29 +6,28 @@
               v-if="disabled">Click to Start</button>
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deckID }}</span>
-        <pile v-bind:isCreated="drawPile1Created"
+        <pile v-bind:isCreated="pile1Created"
               v-bind:deckID="deckID"
               v-on:drawn="startMatch"
               name="pile1"></pile>
         <br/>
-        <pile v-bind:isCreated="drawPile2Created"
+        <pile v-bind:isCreated="pile2Created"
               v-bind:deckID="deckID"
               v-on:drawn="startMatch"
               name="pile2"></pile>
       </div>
     </div>`,
   beforeCreate: async function() {
-      const deck = await DoC.createDeck({ shuffle: true });
-      this.deckID = deck.deck_id;
-      this.disabled = deck.success;
+    const deck = await DoC.createDeck({ shuffle: true });
+    this.deckID = deck.deck_id;
+    this.disabled = deck.success;
   },
   data: function() {
     return {
       'disabled': true,
       'deckID': null,
-      'remaining': 0,
-      'drawPile1Created': false,
-      'drawPile2Created': false
+      'pile1Created': false,
+      'pile2Created': false
     };
   },
   methods: {
@@ -88,29 +87,25 @@
         numCards: parameters.numCards
       });
 
-      console.log(deck);
       const pile1 = await DoC.addToPile({
         pileName: parameters.pileName1,
         cardsToAdd: deck.cards,
         deckID: parameters.deckID
       });
 
-      console.log(pile1);
-      this.drawPile1Created = pile1.success;
+      this.pile1Created = pile1.success;
       deck = await DoC.drawFromDeck({
         deckID: parameters.deckID,
         numCards: parameters.numCards
       });
 
-      console.log(deck);
       const pile2 = await DoC.addToPile({
         pileName: parameters.pileName2,
         cardsToAdd: deck.cards,
         deckID: parameters.deckID
       });
 
-      console.log(pile2);
-      this.drawPile2Created = pile2.success;
+      this.pile2Created = pile2.success;
     }
   }
  });
