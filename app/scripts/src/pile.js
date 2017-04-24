@@ -1,4 +1,4 @@
- Vue.component('draw-pile', {
+ Vue.component('pile', {
   template: `
     <div>
       <span>Pile Name: {{ name }}</span>

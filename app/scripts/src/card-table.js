@@ -7,15 +7,15 @@
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deckID }}</span>
         <span>Cards Remaining: {{ remaining }}</span>
-        <draw-pile v-bind:isCreated="drawPile1Created"
+        <pile v-bind:isCreated="drawPile1Created"
                    v-bind:deckID="deckID"
                    v-on:drawn="startMatch"
-                   name="drawPile1"></draw-pile>
+                   name="drawPile1"></pile>
         <br/>
-        <draw-pile v-bind:isCreated="drawPile2Created"
+        <pile v-bind:isCreated="drawPile2Created"
                    v-bind:deckID="deckID"
                    v-on:drawn="startMatch"
-                   name="drawPile2"></draw-pile>
+                   name="drawPile2"></pile>
       </div>
     </div>`,
   beforeCreate: async function() {
