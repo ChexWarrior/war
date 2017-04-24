@@ -9,21 +9,23 @@
       </div>
     </div>
   `,
-  props: ['initialized', 'name', 'deckID'],
+  props: ['enabled', 'name', 'deckID'],
   methods: {
     drawCard: async function() {
-      const draw = await DoC.drawFromPile({ 
-        deckID: this.deckID, 
-        pileName: this.name
-      });
-      
-      console.log(draw);
-      this.drawnCardUrl = draw.cards[0].image;
-      this.remaining = draw.piles[this.name].remaining;
-      this.$emit('drawn', {
-        pile: this.name,
-        value: draw.cards[0].value
-      });
+      if(this.enabled) {
+        const draw = await DoC.drawFromPile({ 
+          deckID: this.deckID, 
+          pileName: this.name
+        });
+        
+        console.log(draw);
+        this.drawnCardUrl = draw.cards[0].image;
+        this.remaining = draw.piles[this.name].remaining;
+        this.$emit('drawn', {
+          pile: this.name,
+          value: draw.cards[0].value
+        });
+      }
     }
   },
   data: function() {

@@ -6,12 +6,12 @@
               v-if="disabled">Click to Start</button>
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deckID }}</span>
-        <pile v-bind:initialized="pile1Created"
+        <pile v-bind:enabled="pile1Enabled"
               v-bind:deckID="deckID"
               v-on:drawn="startMatch"
               name="pile1"></pile>
         <br/>
-        <pile v-bind:initialized="pile2Created"
+        <pile v-bind:enabled="pile2Enabled"
               v-bind:deckID="deckID"
               v-on:drawn="startMatch"
               name="pile2"></pile>
@@ -26,8 +26,8 @@
     return {
       'disabled': true,
       'deckID': null,
-      'pile1Created': false,
-      'pile2Created': false
+      'pile1Enabled': false,
+      'pile2Enabled': false
     };
   },
   methods: {
@@ -59,16 +59,20 @@
       }
     },
     startMatch: function(event) {
-      //TODO lock pile when a card is drawn but match unresolved
+      //TODO handling of cards after match
       //TODO handle tie
       console.log('Event Received!', event);
       if(event.pile == 'pile1') {
         this.pile1Card = this.translateValue(event.value);
+        this.pile1Enabled = false;
       } else if(event.pile == 'pile2') {
         this.pile2Card = this.translateValue(event.value);
+        this.pile2Enabled = false;
       }
 
       if(this.pile1Card && this.pile2Card) {
+        this.pile1Enabled = true;
+        this.pile2Enabled = true;
         console.log('Both piles have drawn a card!');
         if(this.pile1Card > this.pile2Card) {
           console.log('Player 1 wins!');
@@ -93,7 +97,7 @@
         deckID: parameters.deckID
       });
 
-      this.pile1Created = pile1.success;
+      this.pile1Enabled = pile1.success;
       deck = await DoC.drawFromDeck({
         deckID: parameters.deckID,
         numCards: parameters.numCards
@@ -105,7 +109,7 @@
         deckID: parameters.deckID
       });
 
-      this.pile2Created = pile2.success;
+      this.pile2Enabled = pile2.success;
     }
   }
  });
