@@ -1,7 +1,7 @@
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var sourcemaps = require('gulp-sourcemaps');
-var sass = require('gulp-sass');
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const sass = require('gulp-sass');
 
 gulp.task('watch', () => {
   gulp.watch('app/styles/*.scss', ['style']);
