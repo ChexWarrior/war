@@ -77,10 +77,16 @@
           console.log('Both piles have drawn a card!');
           if(this.pile1Card > this.pile2Card) {
             console.log('Player 1 wins!');
+            this.pile1Card = false;
+            this.pile2Card = false;
           } else if (this.pile2Card > this.pile1Card) {
             console.log('Player 2 wins!');
+            this.pile1Card = false;
+            this.pile2Card = false;
           } else {
             console.log('Tie!');
+            this.pile1Card = false;
+            this.pile2Card = false;
           }
         } else {
           console.log('Both piles have not drawn a card!');
