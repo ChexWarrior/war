@@ -6,12 +6,12 @@
               v-if="disabled">Click to Start</button>
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deckID }}</span>
-        <pile v-bind:isCreated="pile1Created"
+        <pile v-bind:initialized="pile1Created"
               v-bind:deckID="deckID"
               v-on:drawn="startMatch"
               name="pile1"></pile>
         <br/>
-        <pile v-bind:isCreated="pile2Created"
+        <pile v-bind:initialized="pile2Created"
               v-bind:deckID="deckID"
               v-on:drawn="startMatch"
               name="pile2"></pile>

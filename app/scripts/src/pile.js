@@ -9,7 +9,7 @@
       </div>
     </div>
   `,
-  props: ['isCreated', 'name', 'deckID'],
+  props: ['initialized', 'name', 'deckID'],
   methods: {
     drawCard: async function() {
       const draw = await DoC.drawFromPile({ 
