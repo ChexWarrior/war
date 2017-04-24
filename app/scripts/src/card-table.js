@@ -6,7 +6,6 @@
               v-if="disabled">Click to Start</button>
       <div v-bind:class="disabled ? 'game-suspended' : ''">
         <span>Deck ID: {{ deckID }}</span>
-        <span>Cards Remaining: {{ remaining }}</span>
         <pile v-bind:isCreated="drawPile1Created"
                    v-bind:deckID="deckID"
                    v-on:drawn="startMatch"
@@ -21,7 +20,6 @@
   beforeCreate: async function() {
       const deck = await DoC.createDeck({ shuffle: true });
       this.deckID = deck.deck_id;
-      this.remaining = deck.remaining;
       this.disabled = deck.success;
   },
   data: function() {
@@ -91,7 +89,6 @@
       });
 
       console.log(deck);
-      this.remaining = deck.remaining;
       const pile1 = await DoC.addToPile({
         pileName: parameters.pileName1,
         cardsToAdd: deck.cards,
@@ -106,7 +103,6 @@
       });
 
       console.log(deck);
-      this.remaining = deck.remaining;
       const pile2 = await DoC.addToPile({
         pileName: parameters.pileName2,
         cardsToAdd: deck.cards,
