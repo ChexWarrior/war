@@ -7,12 +7,12 @@
                 v-if="disabled">Click to Start</button>
         <div v-bind:class="disabled ? 'game-suspended' : ''">
           <span>Deck ID: {{ deckID }}</span>
-          <pile v-bind:enabled="pile1Enabled"
+          <pile v-bind:enabled="piles['pile1']"
                 v-bind:deckID="deckID"
                 v-on:drawn="startMatch"
                 name="pile1"></pile>
           <br/>
-          <pile v-bind:enabled="pile2Enabled"
+          <pile v-bind:enabled="piles['pile2']"
                 v-bind:deckID="deckID"
                 v-on:drawn="startMatch"
                 name="pile2"></pile>
@@ -27,8 +27,7 @@
       return {
         'disabled': true,
         'deckID': null,
-        'pile1Enabled': false,
-        'pile2Enabled': false
+        'piles': {}
       };
     },
     methods: {
@@ -36,8 +35,7 @@
         this.disabled = false;
         this.createDrawPiles({
           deckID: this.deckID,
-          pileName1: 'pile1',
-          pileName2: 'pile2',
+          pilesToCreate: ['pile1', 'pile2'],
           numCards: 26
         });
       },
@@ -93,30 +91,24 @@
         }
       },
       createDrawPiles: async function(parameters) {
-        let deck = await DoC.drawFromDeck({
-          deckID: parameters.deckID,
-          numCards: parameters.numCards
-        });
+        for(let pileName of parameters.pilesToCreate) {
+          let deck = await DoC.drawFromDeck({
+            deckID: parameters.deckID,
+            numCards: parameters.numCards
+          });
 
-        const pile1 = await DoC.addToPile({
-          pileName: parameters.pileName1,
-          cardsToAdd: deck.cards,
-          deckID: parameters.deckID
-        });
+          let newPile = await DoC.addToPile({
+            pileName: pileName,
+            cardsToAdd: deck.cards,
+            deckID: parameters.deckID
+          });
 
-        this.pile1Enabled = pile1.success;
-        deck = await DoC.drawFromDeck({
-          deckID: parameters.deckID,
-          numCards: parameters.numCards
-        });
-
-        const pile2 = await DoC.addToPile({
-          pileName: parameters.pileName2,
-          cardsToAdd: deck.cards,
-          deckID: parameters.deckID
-        });
-
-        this.pile2Enabled = pile2.success;
+          // to ensure vue actually tracks this change we need
+          // to assign this.piles to a new object...
+          let temp = {};
+          temp[pileName] = newPile.success;
+          this.piles = Object.assign({}, this.piles, temp);
+        }
       }
     }
   });
