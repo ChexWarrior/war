@@ -7,12 +7,12 @@
                 v-if="disabled">Click to Start</button>
         <div v-bind:class="disabled ? 'game-suspended' : ''">
           <span>Deck ID: {{ deckID }}</span>
-          <pile v-bind:enabled="piles['pile1']"
+          <pile v-bind:enabled="piles.get('pile1').enabled"
                 v-bind:deckID="deckID"
                 v-on:drawn="startMatch"
                 name="pile1"></pile>
           <br/>
-          <pile v-bind:enabled="piles['pile2']"
+          <pile v-bind:enabled="piles.get('pile2').enabled"
                 v-bind:deckID="deckID"
                 v-on:drawn="startMatch"
                 name="pile2"></pile>
@@ -27,7 +27,10 @@
       return {
         'disabled': true,
         'deckID': null,
-        'piles': {}
+        'piles': new Map([
+          ['pile1', { enabled: false }],
+          ['pile2', { enabled: false }]
+        ])
       };
     },
     methods: {
@@ -35,7 +38,7 @@
         this.disabled = false;
         this.createDrawPiles({
           deckID: this.deckID,
-          pilesToCreate: ['pile1', 'pile2'],
+          pilesToCreate: this.piles,
           numCards: 26
         });
       },
@@ -91,23 +94,31 @@
         }
       },
       createDrawPiles: async function(parameters) {
-        for(let pileName of parameters.pilesToCreate) {
+        for(let name  of parameters.pilesToCreate.keys()) {
+
           let deck = await DoC.drawFromDeck({
             deckID: parameters.deckID,
             numCards: parameters.numCards
           });
 
           let newPile = await DoC.addToPile({
-            pileName: pileName,
+            pileName: name,
             cardsToAdd: deck.cards,
             deckID: parameters.deckID
           });
 
           // to ensure vue actually tracks this change we need
-          // to assign this.piles to a new object...
-          let temp = {};
-          temp[pileName] = newPile.success;
-          this.piles = Object.assign({}, this.piles, temp);
+          // to assign this.piles to a new map...
+          let temp = new Map();
+          for(let [key, value] of this.piles) {
+            temp.set(key, value);
+          }
+
+          temp.set(name, {
+            enabled: newPile.success
+          });
+
+          this.piles = temp;
         }
       }
     }
