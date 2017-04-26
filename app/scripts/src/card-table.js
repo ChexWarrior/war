@@ -28,8 +28,14 @@
         'disabled': true,
         'deckID': null,
         'piles': new Map([
-          ['pile1', { enabled: false }],
-          ['pile2', { enabled: false }]
+          ['pile1', { 
+            enabled: false,
+            cards: [] 
+          }],
+          ['pile2', { 
+            enabled: false,
+            cards: [] 
+          }]
         ])
       };
     },
@@ -61,41 +67,34 @@
         }
       },
       startMatch: function(event) {
-        //TODO handling of cards after match
-        //TODO handle tie
-        console.log('Event Received!', event);
-        if(event.pile == 'pile1') {
-          this.pile1Card = this.translateValue(event.value);
-          this.pile1Enabled = false;
-        } else if(event.pile == 'pile2') {
-          this.pile2Card = this.translateValue(event.value);
-          this.pile2Enabled = false;
+        console.log('click tracked', event);
+
+        // store drawn card for pile
+        if(this.piles.has(event.pile)) {
+          this.piles.get(event.pile).cards = [event.card];
+          this.piles.get(event.pile).enabled = false;
+          let temp = this.piles;
+          this.piles = new Map();
+          this.piles = temp;
         }
 
-        if(this.pile1Card && this.pile2Card) {
-          this.pile1Enabled = true;
-          this.pile2Enabled = true;
-          console.log('Both piles have drawn a card!');
-          if(this.pile1Card > this.pile2Card) {
-            console.log('Player 1 wins!');
-            this.pile1Card = false;
-            this.pile2Card = false;
-          } else if (this.pile2Card > this.pile1Card) {
-            console.log('Player 2 wins!');
-            this.pile1Card = false;
-            this.pile2Card = false;
+        // check that all piles have a card
+        let allPilesHaveCards = false;
+        for(let pile of this.piles) {
+          if(pile.cards) { 
+            allPilesHaveCards = pile.cards.length > 0;
           } else {
-            console.log('Tie!');
-            this.pile1Card = false;
-            this.pile2Card = false;
+            allPilesHaveCards = false;
           }
-        } else {
-          console.log('Both piles have not drawn a card!');
+        }
+
+        // if all piles have drawn a card then perform match
+        if(allPilesHaveCards) {
+
         }
       },
       createDrawPiles: async function(parameters) {
         for(let name  of parameters.pilesToCreate.keys()) {
-
           let deck = await DoC.drawFromDeck({
             deckID: parameters.deckID,
             numCards: parameters.numCards
