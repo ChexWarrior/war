@@ -7,12 +7,12 @@
                 v-if="disabled">Click to Start</button>
         <div v-bind:class="disabled ? 'game-suspended' : ''">
           <span>Deck ID: {{ deckID }}</span>
-          <pile v-bind:enabled="piles.get('pile1').enabled"
+          <pile v-bind:enabled="piles['pile1'].enabled"
                 v-bind:deckID="deckID"
                 v-on:drawn="startMatch"
                 name="pile1"></pile>
           <br/>
-          <pile v-bind:enabled="piles.get('pile2').enabled"
+          <pile v-bind:enabled="piles['pile2'].enabled"
                 v-bind:deckID="deckID"
                 v-on:drawn="startMatch"
                 name="pile2"></pile>
@@ -27,16 +27,14 @@
       return {
         'disabled': true,
         'deckID': null,
-        'piles': new Map([
-          ['pile1', { 
-            enabled: false,
-            cards: [] 
-          }],
-          ['pile2', { 
-            enabled: false,
-            cards: [] 
-          }]
-        ])
+        'piles': {
+          'pile1': {
+            enabled: true,
+          },
+          'pile2': {
+            enabled: true,
+          }
+        } 
       };
     },
     methods: {
@@ -70,17 +68,14 @@
         console.log('click tracked', event);
 
         // store drawn card for pile
-        if(this.piles.has(event.pile)) {
-          this.piles.get(event.pile).cards = [event.card];
-          this.piles.get(event.pile).enabled = false;
-          let temp = this.piles;
-          this.piles = new Map();
-          this.piles = temp;
+        if(this.piles[event.pile]) {
+          this.piles[event.pile].cards = [event.card];
+          this.piles[event.pile].enabled = false;
         }
 
         // check that all piles have a card
         let allPilesHaveCards = false;
-        for(let pile of this.piles) {
+        for(let pile of Object.keys(this.piles)) {
           if(pile.cards) { 
             allPilesHaveCards = pile.cards.length > 0;
           } else {
@@ -94,7 +89,7 @@
         }
       },
       createDrawPiles: async function(parameters) {
-        for(let name  of parameters.pilesToCreate.keys()) {
+        for(let name of Object.keys(parameters.pilesToCreate)) {
           let deck = await DoC.drawFromDeck({
             deckID: parameters.deckID,
             numCards: parameters.numCards
@@ -106,18 +101,7 @@
             deckID: parameters.deckID
           });
 
-          // to ensure vue actually tracks this change we need
-          // to assign this.piles to a new map...
-          let temp = new Map();
-          for(let [key, value] of this.piles) {
-            temp.set(key, value);
-          }
-
-          temp.set(name, {
-            enabled: newPile.success
-          });
-
-          this.piles = temp;
+          this.piles[name].enabled = newPile.success;
         }
       }
     }
