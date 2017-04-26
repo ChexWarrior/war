@@ -29,10 +29,10 @@
         'deckID': null,
         'piles': {
           'pile1': {
-            enabled: true,
+            enabled: true
           },
           'pile2': {
-            enabled: true,
+            enabled: true
           }
         } 
       };
