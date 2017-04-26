@@ -22,9 +22,9 @@
           console.log(draw);
           this.drawnCardUrl = draw.cards[0].image;
           this.remaining = draw.piles[this.name].remaining;
-          this.$emit('drawn', {
+          this.$emit('cardDrawn', {
             pile: this.name,
-            value: draw.cards[0].value
+            card: draw.cards[0]
           });
         }
       }

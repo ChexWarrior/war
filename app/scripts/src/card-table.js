@@ -9,7 +9,7 @@
           <span>Deck ID: {{ deckID }}</span>
           <pile v-bind:enabled="piles['pile1'].enabled"
                 v-bind:deckID="deckID"
-                v-on:drawn="startMatch"
+                v-on:cardDrawn="startMatch"
                 name="pile1"></pile>
           <br/>
           <pile v-bind:enabled="piles['pile2'].enabled"
