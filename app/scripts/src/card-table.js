@@ -81,6 +81,7 @@
             allPilesHaveCards = true;
           } else {
             allPilesHaveCards = false;
+            break;
           }
         }
 
