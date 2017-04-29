@@ -17,10 +17,7 @@ gulp.task('style', () => {
 gulp.task('script', () => {
   return gulp.src('app/scripts/src/*.js')
     .pipe(sourcemaps.init())
-    .pipe(babel({
-      presets: ['es2015'],
-      plugins: [ "transform-async-functions"]
-    }))
+    .pipe(babel())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('app/scripts/compiled'));
 });
