@@ -1,8 +1,8 @@
 (function(Vue, DoC) {
   Vue.component('pile', {
     template: `
-      <div>
-        <div v-on:click="drawCard" class="pile"></div>
+      <div class="pile">
+        <div v-on:click="drawCard" class="next-card"></div>
         <img v-bind:src="drawnCardUrl" class="current-card" />
       </div>
     `,
