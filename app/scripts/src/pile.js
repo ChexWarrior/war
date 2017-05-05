@@ -3,9 +3,7 @@
     template: `
       <div>
         <div v-on:click="drawCard" class="pile"></div>
-        <div class="current-card">
-          <img v-if="drawnCardUrl" v-bind:src="drawnCardUrl"/>
-        </div>
+        <img v-bind:src="drawnCardUrl" class="current-card" />
       </div>
     `,
     props: ['enabled', 'name', 'deckID'],
