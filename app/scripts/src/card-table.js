@@ -1,21 +1,26 @@
 (function(Vue, DoC) {
   Vue.component('card-table', {
     template: `
-      <div class="card-table">
+      <div class="card-table container">
         <button class="start-button" 
                 v-on:click="startGame"
                 v-if="disabled">Click to Start</button>
-        <div v-bind:class="disabled ? 'game-suspended' : ''">
-          <span>Deck ID: {{ deckID }}</span>
-          <pile v-bind:enabled="piles['pile1'].enabled"
-                v-bind:deckID="deckID"
-                v-on:cardDrawn="startMatch"
-                name="pile1"></pile>
-          <br/>
-          <pile v-bind:enabled="piles['pile2'].enabled"
-                v-bind:deckID="deckID"
-                v-on:cardDrawn="startMatch"
-                name="pile2"></pile>
+
+        <div class="row">
+          <div class="col-sm-offset-4 col-sm-4">
+            <pile v-bind:enabled="piles['pile1'].enabled"
+                  v-bind:deckID="deckID"
+                  v-on:cardDrawn="startMatch"
+                  name="pile1"></pile>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 col-sm-offset-4">
+            <pile v-bind:enabled="piles['pile2'].enabled"
+                  v-bind:deckID="deckID"
+                  v-on:cardDrawn="startMatch"
+                  name="pile2"></pile>
+          </div>
         </div>
       </div>`,
     beforeCreate: async function() {

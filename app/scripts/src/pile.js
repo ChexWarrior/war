@@ -2,11 +2,9 @@
   Vue.component('pile', {
     template: `
       <div>
-        <span>Pile Name: {{ name }}</span>
-        <span>Cards Remaining: {{ remaining }}</span>
         <div v-on:click="drawCard" class="pile"></div>
         <div class="current-card">
-          <img v-bind:src="drawnCardUrl"/>
+          <img v-if="drawnCardUrl" v-bind:src="drawnCardUrl"/>
         </div>
       </div>
     `,
